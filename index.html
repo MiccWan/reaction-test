@@ -101,8 +101,15 @@
     board.innerHTML = html;
   }
 
-  button.addEventListener('touchstart', handleClick);
-  button.addEventListener('mousedown', handleClick);
+  // NOTE: mouse events might be fired in touch screen
+  // @see https://www.html5rocks.com/en/mobile/touchandmouse/
+  button.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    handleClick();
+  });
+  button.addEventListener('mousedown', (e) => {
+    handleClick();
+  });
 </script>
 
 </html>
