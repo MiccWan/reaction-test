@@ -1,0 +1,98 @@
+<html>
+
+<head>
+  <title>Reaction Test</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .full-height {
+      height: 100%;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="full-height flex-row">
+    <div style="width: 40%; height: 100%; padding: 20px;">
+      <h1>Meow</h1>
+      <div id="board">
+        <p id="avg"></p>
+      </div>
+    </div>
+    <div id="button" style="width: 60%; height: 100%;" class="flex-row">
+      <div id="button-text"></div>
+    </div>
+  </div>
+</body>
+<script>
+
+  const button = document.getElementById('button');
+  const buttonText = document.getElementById('button-text');
+  const board = document.getElementById('board');
+  let state = 'wait', readyTime = 0;
+  const records = [];
+  setWait();
+
+  function setWait() {
+    state = 'wait';
+    buttonText.innerHTML = 'click to start';
+    button.style.backgroundColor = 'grey';
+  }
+
+  function setStart() {
+    button.style.backgroundColor = 'red';
+    state = 'start';
+    buttonText.innerHTML = 'wait...';
+    const delay = 3 + Math.random() * 4;
+    setTimeout(setReady, delay * 1000);
+  }
+
+  function setReady() {
+    button.style.backgroundColor = 'green';
+    state = 'ready';
+    buttonText.innerHTML = 'click!';
+    readyTime = Date.now();
+  }
+
+  function handleClick() {
+    if (state === 'wait') {
+      setStart();
+    }
+    else if (state === 'start') {
+      alert('Too early!');
+      setWait();
+    }
+    else if (state === 'ready') {
+      records.push(Date.now() - readyTime);
+      setWait();
+      renderBoard();
+    }
+  }
+
+  function renderBoard() {
+    let html = '', avg = 0, sum = 0;
+    for (const rec of records) {
+      sum += rec;
+      html += `<p>${Math.floor(rec)} ms</p>`;
+    }
+    if (records.length) {
+      avg = sum / records.length;
+      html += `<p>avg: ${Math.floor(avg)} ms</p>`;
+    }
+
+    board.innerHTML = html;
+  }
+
+  button.addEventListener('click', handleClick);
+</script>
+
+</html>
