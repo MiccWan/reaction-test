@@ -101,7 +101,8 @@
     board.innerHTML = html;
   }
 
-  button.addEventListener('click', handleClick);
+  button.addEventListener('touchstart', handleClick);
+  button.addEventListener('mousedown', handleClick);
 </script>
 
 </html>
