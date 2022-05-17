@@ -47,7 +47,7 @@
   const button = document.getElementById('button');
   const buttonText = document.getElementById('button-text');
   const board = document.getElementById('board');
-  let state = 'wait', readyTime = 0;
+  let state = 'wait', readyTime = 0, timeout = null;
   const records = [];
   setWait();
 
@@ -62,7 +62,7 @@
     state = 'start';
     buttonText.innerHTML = 'wait...';
     const delay = 3 + Math.random() * 4;
-    setTimeout(setReady, delay * 1000);
+    timeout = setTimeout(setReady, delay * 1000);
   }
 
   function setReady() {
@@ -70,6 +70,7 @@
     state = 'ready';
     buttonText.innerHTML = 'click!';
     readyTime = Date.now();
+    timeout = null;
   }
 
   function handleClick() {
@@ -77,6 +78,7 @@
       setStart();
     }
     else if (state === 'start') {
+      clearTimeout(timeout);
       alert('Too early!');
       setWait();
     }
